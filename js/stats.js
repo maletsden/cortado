@@ -44,3 +44,9 @@ export function countsByType(logs, menu) {
     .map(m => ({ id: m.id, name: m.name, color: m.color, count: counts.get(m.id) }))
     .sort((a, b) => b.count - a.count);
 }
+
+export function hourlyCounts(logs) {
+  const buckets = new Array(24).fill(0);
+  for (const l of logs) buckets[new Date(l.timestamp).getHours()]++;
+  return buckets;
+}

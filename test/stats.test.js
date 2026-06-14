@@ -54,3 +54,18 @@ test('countsByType ignores logs for deleted menu items', () => {
     { id: 'm2', name: 'Latte', color: '#b', count: 0 },
   ]);
 });
+
+import { hourlyCounts } from '../js/stats.js';
+
+test('hourlyCounts buckets logs into 24 hours (local time)', () => {
+  const logs = [
+    { id: '1', menuItemId: 'm1', timestamp: new Date(2026, 5, 17, 8).getTime() },
+    { id: '2', menuItemId: 'm1', timestamp: new Date(2026, 5, 18, 8).getTime() },
+    { id: '3', menuItemId: 'm1', timestamp: new Date(2026, 5, 17, 21).getTime() },
+  ];
+  const r = hourlyCounts(logs);
+  assert.equal(r.length, 24);
+  assert.equal(r[8], 2);
+  assert.equal(r[21], 1);
+  assert.equal(r[0], 0);
+});
