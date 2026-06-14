@@ -50,3 +50,14 @@ export function hourlyCounts(logs) {
   for (const l of logs) buckets[new Date(l.timestamp).getHours()]++;
   return buckets;
 }
+
+export function caffeineToday(logs, menu, now) {
+  const mg = new Map(menu.map(m => [m.id, m.caffeineMg]));
+  const start = startOfDay(now);
+  const end = start + 24 * 60 * 60 * 1000;
+  let total = 0;
+  for (const l of logs) {
+    if (l.timestamp >= start && l.timestamp < end) total += mg.get(l.menuItemId) || 0;
+  }
+  return total;
+}

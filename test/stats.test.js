@@ -69,3 +69,21 @@ test('hourlyCounts buckets logs into 24 hours (local time)', () => {
   assert.equal(r[21], 1);
   assert.equal(r[0], 0);
 });
+
+import { caffeineToday } from '../js/stats.js';
+
+test('caffeineToday sums mg of today\'s logs via menu', () => {
+  const now = new Date(2026, 5, 17, 12).getTime();
+  const logs = [
+    { id: '1', menuItemId: 'm1', timestamp: new Date(2026, 5, 17, 8).getTime() },  // 65
+    { id: '2', menuItemId: 'm2', timestamp: new Date(2026, 5, 17, 9).getTime() },  // 75
+    { id: '3', menuItemId: 'm1', timestamp: new Date(2026, 5, 16, 9).getTime() },  // yesterday
+  ];
+  assert.equal(caffeineToday(logs, MENU, now), 140);
+});
+
+test('caffeineToday treats deleted menu items as 0 mg', () => {
+  const now = new Date(2026, 5, 17, 12).getTime();
+  const logs = [{ id: '1', menuItemId: 'gone', timestamp: new Date(2026, 5, 17, 8).getTime() }];
+  assert.equal(caffeineToday(logs, MENU, now), 0);
+});
