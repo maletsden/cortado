@@ -17,6 +17,9 @@ function init() {
     if (btn) go(btn.dataset.screen);
   });
   go('menu');
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
 }
 
 function go(name) {
