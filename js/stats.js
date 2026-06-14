@@ -61,3 +61,22 @@ export function caffeineToday(logs, menu, now) {
   }
   return total;
 }
+
+const DAY = 24 * 60 * 60 * 1000;
+
+export function currentStreak(logs, now) {
+  if (logs.length === 0) return 0;
+  const days = new Set(logs.map(l => startOfDay(l.timestamp)));
+  const today = startOfDay(now);
+  // Streak may end today or yesterday; otherwise it is broken.
+  let cursor;
+  if (days.has(today)) cursor = today;
+  else if (days.has(today - DAY)) cursor = today - DAY;
+  else return 0;
+  let streak = 0;
+  while (days.has(cursor)) {
+    streak++;
+    cursor -= DAY;
+  }
+  return streak;
+}

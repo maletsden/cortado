@@ -87,3 +87,29 @@ test('caffeineToday treats deleted menu items as 0 mg', () => {
   const logs = [{ id: '1', menuItemId: 'gone', timestamp: new Date(2026, 5, 17, 8).getTime() }];
   assert.equal(caffeineToday(logs, MENU, now), 0);
 });
+
+import { currentStreak } from '../js/stats.js';
+
+const dlog = (y, mo, d) => ({ id: `${y}${mo}${d}`, menuItemId: 'm1', timestamp: new Date(y, mo, d, 9).getTime() });
+
+test('currentStreak counts consecutive days ending today', () => {
+  const now = new Date(2026, 5, 17, 12).getTime();
+  const logs = [dlog(2026, 5, 17), dlog(2026, 5, 16), dlog(2026, 5, 15)];
+  assert.equal(currentStreak(logs, now), 3);
+});
+
+test('currentStreak still counts if today has no log but yesterday does', () => {
+  const now = new Date(2026, 5, 17, 12).getTime();
+  const logs = [dlog(2026, 5, 16), dlog(2026, 5, 15)];
+  assert.equal(currentStreak(logs, now), 2);
+});
+
+test('currentStreak is 0 when the latest log is older than yesterday', () => {
+  const now = new Date(2026, 5, 17, 12).getTime();
+  const logs = [dlog(2026, 5, 14)];
+  assert.equal(currentStreak(logs, now), 0);
+});
+
+test('currentStreak is 0 for no logs', () => {
+  assert.equal(currentStreak([], new Date(2026, 5, 17).getTime()), 0);
+});
