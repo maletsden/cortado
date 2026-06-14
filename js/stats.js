@@ -34,3 +34,13 @@ export function countInPeriod(logs, period, now) {
   }
   return 0;
 }
+
+export function countsByType(logs, menu) {
+  const counts = new Map(menu.map(m => [m.id, 0]));
+  for (const l of logs) {
+    if (counts.has(l.menuItemId)) counts.set(l.menuItemId, counts.get(l.menuItemId) + 1);
+  }
+  return menu
+    .map(m => ({ id: m.id, name: m.name, color: m.color, count: counts.get(m.id) }))
+    .sort((a, b) => b.count - a.count);
+}

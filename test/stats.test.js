@@ -26,3 +26,31 @@ test('all counts everything', () => {
   const logs = [log(2025, 0, 1), log(2026, 5, 17)];
   assert.equal(countInPeriod(logs, 'all', NOW), 2);
 });
+
+import { countsByType } from '../js/stats.js';
+
+const MENU = [
+  { id: 'm1', name: 'Espresso', color: '#a', caffeineMg: 65 },
+  { id: 'm2', name: 'Latte', color: '#b', caffeineMg: 75 },
+];
+
+test('countsByType returns counts per menu item, descending', () => {
+  const logs = [
+    { id: '1', menuItemId: 'm2', timestamp: 1 },
+    { id: '2', menuItemId: 'm1', timestamp: 2 },
+    { id: '3', menuItemId: 'm1', timestamp: 3 },
+  ];
+  const r = countsByType(logs, MENU);
+  assert.deepEqual(r, [
+    { id: 'm1', name: 'Espresso', color: '#a', count: 2 },
+    { id: 'm2', name: 'Latte', color: '#b', count: 1 },
+  ]);
+});
+
+test('countsByType ignores logs for deleted menu items', () => {
+  const logs = [{ id: '1', menuItemId: 'gone', timestamp: 1 }];
+  assert.deepEqual(countsByType(logs, MENU), [
+    { id: 'm1', name: 'Espresso', color: '#a', count: 0 },
+    { id: 'm2', name: 'Latte', color: '#b', count: 0 },
+  ]);
+});
