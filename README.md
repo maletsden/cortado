@@ -1,64 +1,40 @@
 # Cortado
 
-A small coffee-tracking PWA. Tap a coffee to log it, watch your daily count, caffeine
-ceiling, streak, and stats. Built for two phones — no accounts, no server. Data lives in
-each device's `localStorage`.
+A minimalist coffee-tracking web app for two. Tap a coffee to log it, then watch your
+daily count, caffeine load, and brewing streak — all in a quiet "Dark Luxe" interface.
 
-"Dark Luxe" theme. Vanilla JS ES modules, no build step, no dependencies.
+**Live:** https://maletsden.github.io/cortado/
+
+## Overview
+
+Cortado is a fully client-side progressive web app. There are no accounts and no server —
+each device keeps its own history in the browser, so it installs to a phone's home screen
+and runs offline like a native app.
 
 ## Features
 
-- One-tap logging from a photo menu
-- Hero header: cups today, caffeine vs. ceiling, current streak
-- Stats: totals (today / week / month / all-time), by-type bars, time-of-day chart, week comparison
-- Manage your own coffees (name, caffeine, photo, color)
-- Settings: daily coffee limit + caffeine ceiling, with an over-limit nudge
-- Installable PWA, works offline
+- **One-tap logging** from a photo menu of your coffees
+- **At-a-glance header** — cups today, caffeine against your ceiling, current streak
+- **Stats** — totals across day / week / month / all-time, breakdown by type, time-of-day rhythm, and week-over-week comparison
+- **Your menu** — add coffees with their own name, caffeine content, photo, and color
+- **Gentle limits** — set a daily cup limit and caffeine ceiling, with an unobtrusive nudge when you go over
+- **Installable & offline** — add to home screen, works without a connection
 
-## Run locally
+## Tech
 
-ES modules need to be served over HTTP (opening `index.html` via `file://` won't work).
-Any static server does. With Python:
+Vanilla JavaScript ES modules. No framework, no build step, no runtime dependencies.
+Charts are pure CSS. State persists in `localStorage`. Offline support via a service
+worker and web app manifest.
 
-```bash
-python -m http.server 8000
-# then open http://localhost:8000
-```
-
-Or with Node:
+## Development
 
 ```bash
-npx serve .
+npm test                     # run the test suite (Node's built-in runner)
+python -m http.server 8000   # serve locally at http://localhost:8000
 ```
 
-## Tests
+App icons are generated, not committed by hand: `node scripts/gen-icons.mjs`.
 
-Pure logic (storage + stats) is covered by Node's built-in test runner:
+## License
 
-```bash
-npm test   # = node --test
-```
-
-## Icons
-
-App icons are generated (no binary assets checked in by hand):
-
-```bash
-node scripts/gen-icons.mjs   # writes icons/icon-192.png and icon-512.png
-```
-
-## Deploy to GitHub Pages
-
-1. Push this repo to GitHub.
-2. Settings → Pages → Build and deployment → Source: **Deploy from a branch**.
-3. Pick the branch and `/ (root)` folder, save.
-4. Open the published URL on each iPhone in Safari → Share → **Add to Home Screen**.
-
-Everything is static and relative-pathed, so it serves correctly from a project subpath
-(`https://<user>.github.io/<repo>/`).
-
-## Notes
-
-- Data is per-device. The two phones do not sync — each keeps its own log.
-- Clearing Safari site data wipes the log.
-- Coffee photos load from Unsplash; once visited they're cached for offline use.
+MIT
