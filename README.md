@@ -1,4 +1,4 @@
-# Coffee
+# Cortado
 
 A small coffee-tracking PWA. Tap a coffee to log it, watch your daily count, caffeine
 ceiling, streak, and stats. Built for two phones — no accounts, no server. Data lives in
