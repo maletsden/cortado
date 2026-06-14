@@ -113,3 +113,16 @@ test('currentStreak is 0 when the latest log is older than yesterday', () => {
 test('currentStreak is 0 for no logs', () => {
   assert.equal(currentStreak([], new Date(2026, 5, 17).getTime()), 0);
 });
+
+import { weekComparison } from '../js/stats.js';
+
+test('weekComparison splits this week vs previous week (Mon start)', () => {
+  // NOW = Wed 2026-06-17. This week starts Mon 06-15. Last week 06-08..06-14.
+  const now = new Date(2026, 5, 17, 10).getTime();
+  const logs = [
+    dlog(2026, 5, 15), dlog(2026, 5, 17),            // this week -> 2
+    dlog(2026, 5, 8), dlog(2026, 5, 14), dlog(2026, 5, 9), // last week -> 3
+    dlog(2026, 5, 7),                                  // two weeks ago -> excluded
+  ];
+  assert.deepEqual(weekComparison(logs, now), { thisWeek: 2, lastWeek: 3 });
+});

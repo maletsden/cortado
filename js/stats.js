@@ -80,3 +80,14 @@ export function currentStreak(logs, now) {
   }
   return streak;
 }
+
+export function weekComparison(logs, now) {
+  const thisStart = startOfWeek(now);
+  const lastStart = thisStart - 7 * DAY;
+  let thisWeek = 0, lastWeek = 0;
+  for (const l of logs) {
+    if (l.timestamp >= thisStart) thisWeek++;
+    else if (l.timestamp >= lastStart) lastWeek++;
+  }
+  return { thisWeek, lastWeek };
+}
